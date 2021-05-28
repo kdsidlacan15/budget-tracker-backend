@@ -3,6 +3,10 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const cors = require('cors')
 
+require('dotenv').config()
+require('./db');
+
+
 const app = express()
 const port = process.env.PORT || 4000
 
