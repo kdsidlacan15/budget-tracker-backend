@@ -21,6 +21,17 @@ app.use('/api/users', require('./routes/users'))
 app.use('/api/income', require('./routes/income'))
 app.use('/api/expenses', require('./routes/expenses'))
 
+// error handling middleware
+app.use((err,req,res,next)=>{
+    if( res.statusCode == 200) res.status(400)
+    res.send({
+        error: {
+             message: err.message
+        }
+    })
+})
+
+
 app.listen( port ,()=>{
     console.log(`Server running on port ${port}`)
 })
