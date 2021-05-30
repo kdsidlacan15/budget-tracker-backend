@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const saltRounds = parseInt(process.env.SALT_ROUNDS)
 const User = require('./../models/User')
 const jwt = require('jsonwebtoken')
+const { verifyUser} = require('./../utils')
+const { verifyAdmin } = require('./../utils')
 const privateKey = process.env.PRIVATE_KEY
 
 // register
@@ -61,7 +63,14 @@ router.post('/login', (req,res,next)=>{
 
 })
 
-
+//Get All users(Admin)
+router.get('/',verifyUser, verifyAdmin,(req,res,next)=> {
+    User.find({isActive:true})
+    .then(user=> {
+        res.send(user)
+    })
+    .catch(next) 
+})
 
 
 module.exports = router
