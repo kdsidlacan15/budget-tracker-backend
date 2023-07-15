@@ -29,9 +29,10 @@ router.post("/", verifyUser, (req, res, next) => {
 
 module.exports = router;
 
-//Get User Income
+//Get All User Income
 router.get("/", verifyUser, (req, res, next) => {
-  Income.find({ user: req.user.id })
+  const { _id } = req.user;
+  Income.find({ user: _id })
     .then((income) => {
       res.send(income);
     })

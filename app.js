@@ -22,7 +22,7 @@ app.use("/api/expenses", require("./routes/expenses"));
 
 // error handling middleware
 app.use((err, req, res, next) => {
-  if (res.statusCode == 200) res.status(400);
+  res.status(400);
   res.send({
     error: {
       message: err.message,
