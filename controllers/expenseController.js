@@ -1,4 +1,4 @@
-const Expense = require("../../models/Expense");
+const Expense = require("../models/Expense");
 
 // Get All Expenses
 const getAllExpenses = async (req, res, next) => {

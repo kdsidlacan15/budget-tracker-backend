@@ -7,7 +7,7 @@ const {
   updateIncome,
   deleteIncome,
   viewIncome,
-} = require("./controllers/incomeController");
+} = require("../controllers/incomeController");
 
 //Add Income
 router.post("/", verifyUser, addIncome);

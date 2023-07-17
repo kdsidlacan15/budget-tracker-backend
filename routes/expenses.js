@@ -8,7 +8,7 @@ const {
   updateExpense,
   deleteExpense,
   viewExpense,
-} = require("./controllers/expenseController");
+} = require("../controllers/expenseController");
 
 //Add Expense
 router.post("/", verifyUser, addExpense);

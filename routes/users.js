@@ -1,12 +1,11 @@
 const router = require("express").Router();
-const User = require("./../models/User");
 const { verifyUser } = require("./../utils");
 const { verifyAdmin } = require("./../utils");
 const {
   registerUser,
   loginUser,
   getAllusers,
-} = require("./controllers/userController");
+} = require("../controllers/userController");
 
 // register
 router.post("/register", registerUser);
