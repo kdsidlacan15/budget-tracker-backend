@@ -1,43 +1,46 @@
-const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const User = require('../models/User');
+const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 const privateKey = process.env.PRIVATE_KEY;
 
 const registerUser = async (req, res, next) => {
   try {
     // validate password
-    let { password, confirmPassword } = req.body;
+    let {
+      password,
+      confirmPassword,
+      firstName,
+      lastName,
+      isActive,
+      isAdmin,
+      email,
+    } = req.body;
 
-    const emailExists = await User.findOne({ email: req.body.email });
+    const emailExists = await User.findOne({ email });
 
     if (emailExists) {
-      throw Error("Email already in use");
+      throw new Error('Email already in use');
     }
 
     if (password.length < 8) {
-      throw new Error("Password must be atleast 8 characters");
+      throw new Error('Password must be atleast 8 characters');
     }
     if (password !== confirmPassword) {
-      throw new Error("Password did not match");
+      throw new Error('Password did not match');
     }
     // hash password
-    const hashedPass = await bcrypt.hash(req.body.password, saltRounds);
-    const user = await User.create(req.body);
-    user.password = hashedPass;
-    res.send(user);
-    bcrypt
-      .hash(req.body.password, saltRounds)
-      .then((hash) => {
-        req.body.password = hash;
+    const hashedPass = await bcrypt.hash(password, saltRounds);
 
-        return User.create(req.body);
-      })
-      .then((user) => {
-        user.password = undefined;
-        res.send(user);
-      })
-      .catch(next);
+    const user = await User.create({
+      password: hashedPass,
+      firstName,
+      lastName,
+      isActive,
+      isAdmin,
+      email,
+    });
+    res.send(user);
   } catch (error) {
     next(error);
   }
@@ -52,7 +55,7 @@ const loginUser = async (req, res, next) => {
       req.user = user;
     } else {
       res.status(401);
-      throw new Error("Invalid Email Address");
+      throw new Error('Invalid Email Address');
     }
 
     const isMatchPassword = await bcrypt.compare(password, user.password);
@@ -62,7 +65,7 @@ const loginUser = async (req, res, next) => {
       res.send({ token });
     } else {
       res.status(401);
-      throw new Error("Password did not match");
+      throw new Error('Password did not match');
     }
   } catch (error) {
     next(error);
